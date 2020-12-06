@@ -1,0 +1,48 @@
+<html>
+    <head>
+        <script>
+        function loaded() {
+            console.log("Loaded")
+            const socket = new WebSocket('ws://localhost:8765');
+
+            socket.addEventListener('open', function (event) {
+                socket.send(encode_msg({
+                    type: 'join',
+                    room: 'js-room',
+                }));
+                console.log("Opened")
+            });
+
+            socket.addEventListener('message', function (event) {
+                console.log('Message from server ', event.data);
+            });
+            
+            window.addEventListener('beforeunload', () => {
+                console.log("UNLOAD")
+                socket.close()
+            })
+            console.log("LOADED")
+            
+            let count = 0
+            setInterval(() => {
+                count = count+1
+                socket.send(encode_msg({
+                    type: 'ping',
+                    seq: count,
+                }))
+            }, 2000)
+        }
+
+        function encode_msg(msg) { 
+            return JSON.stringify(msg)
+        }
+
+        function decode_msg(text) {
+            return JSON.parse(text)
+        }
+        </script>
+    </head>
+<body onload="loaded()">
+	<p>Hi</p>
+</body>
+</html>
