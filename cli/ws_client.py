@@ -1,5 +1,8 @@
-from typing import *
-import asyncio, json, websockets, time, sys
+import asyncio
+import time
+from typing import Any, Dict, List
+import sys
+import websockets
 
 from utils import encode, decode
 
