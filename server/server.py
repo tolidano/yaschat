@@ -2,10 +2,10 @@ import asyncio
 from typing import Any, Dict, List
 import websockets
 
-from client import Client
-from room import Room
-from stats import Stats
-from utils import encode, decode
+from .client import Client
+from .room import Room
+from .stats import Stats
+from ..common.utils import encode, decode
 
 
 class Server(object):
