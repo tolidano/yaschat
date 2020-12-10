@@ -2,10 +2,10 @@ import asyncio
 from typing import Any, Dict, List
 import websockets
 
-from .client import Client
-from .room import Room
-from .stats import Stats
-from ..common.utils import encode, decode
+from common.client import Client
+from common.room import Room
+from common.stats import Stats
+from common.utils import encode, decode
 
 
 class Server(object):
@@ -58,7 +58,7 @@ class Server(object):
 
 
     async def listen_socket(self, websocket, path):
-        print("connect", path)
+        print(f"Connect {path}")
         self.client_id_count += 1
         room: Optional[Room] = None
         client = Client(id=self.client_id_count, socket=websocket)
@@ -68,20 +68,15 @@ class Server(object):
             async for message_raw in websocket:
                 message = decode(message_raw)
                 if message["type"] == "join":
-                    # Get/create room
                     room_key = message["room"]
                     if not room_key in self.rooms:
                         room = Room(key=room_key)
                         self.rooms[room_key] = room
-
                         room.future = asyncio.ensure_future(Server.listen_room(room))
                     else:
                         room = self.rooms[room_key]
-
                     room.new_clients.append(client)
-
                     await websocket.send(encode({"type": "joined", "client_id": client.id}))
-
                 elif room:
                     message["client_id"] = client.id
                     await room.event_queue.put(message)
@@ -102,4 +97,4 @@ class Server(object):
                 await room.future
                 print(f"Cleaned Room {room.key}")
 
-        print("disconnect", self.rooms)
+        print(f"Disconnect {self.rooms}")

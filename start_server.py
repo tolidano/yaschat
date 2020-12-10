@@ -1,7 +1,7 @@
 import asyncio
 import websockets
 
-from .server import Server
+from server.server import Server
 
 
 def main() -> None:

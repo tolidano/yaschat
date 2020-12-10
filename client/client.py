@@ -4,7 +4,7 @@ from typing import Any, Dict, List
 import sys
 import websockets
 
-from ..common.utils import encode, decode
+from common.utils import encode, decode
 
 if len(sys.argv) < 2:
     print(f"Syntax {sys.argv[0]} [room]")

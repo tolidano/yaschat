@@ -2,7 +2,7 @@ from asyncio import Queue
 from dataclasses import dataclass, field
 from typing import Any, Dict, List
 
-from client import Client
+from .client import Client
 
 
 @dataclass
